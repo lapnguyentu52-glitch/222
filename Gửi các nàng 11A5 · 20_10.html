@@ -1,0 +1,993 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#07030f">
+<title>Gửi các nàng 11A5 · 20/10</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700&family=Pacifico&display=swap" rel="stylesheet">
+<style>
+@property --c1{syntax:'<color>';inherits:true;initial-value:#ff9ec7}
+@property --c2{syntax:'<color>';inherits:true;initial-value:#ff4f93}
+@property --bg1{syntax:'<color>';inherits:true;initial-value:#3a1262}
+@property --bg2{syntax:'<color>';inherits:true;initial-value:#5a1750}
+@property --o{syntax:'<number>';inherits:true;initial-value:0}
+@property --p{syntax:'<number>';inherits:true;initial-value:0}
+@property --a{syntax:'<number>';inherits:false;initial-value:0}
+@property --sa{syntax:'<number>';inherits:false;initial-value:0}
+
+:root{
+  --gold:#ffd98a;
+  --gold-glow:#ffb84d;
+  --p:0;
+  --o:0;
+  --font:'Be Vietnam Pro',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --script:'Pacifico','Be Vietnam Pro',cursive;
+  --st:env(safe-area-inset-top,0px);
+  --sb:env(safe-area-inset-bottom,0px)
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;overflow:hidden;color:#fff;font-family:var(--font);user-select:none;-webkit-user-select:none;touch-action:manipulation}
+body{
+  background:radial-gradient(120% 70% at 50% 0%,var(--bg1),transparent 72%),radial-gradient(110% 60% at 50% 105%,var(--bg2),transparent 70%),#07030f;
+  transition:--bg1 1.8s ease,--bg2 1.8s ease;
+}
+button{font:inherit;color:inherit;cursor:pointer}
+#fx{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:1}
+#vig{position:fixed;inset:0;pointer-events:none;z-index:2;background:radial-gradient(120% 90% at 50% 45%,transparent 55%,rgba(0,0,0,.62))}
+#orn{position:fixed;inset:0;z-index:3;pointer-events:none;overflow:hidden}
+#orn svg{
+  position:absolute;left:var(--x);top:var(--y);width:var(--s);height:var(--s);opacity:0;
+  transform:translate(-50%,-50%) rotate(var(--r,0deg));
+  filter:drop-shadow(0 0 10px currentColor);
+  animation:ornIn 1.4s cubic-bezier(.2,.9,.3,1.2) forwards,twk 3.8s ease-in-out infinite alternate;
+  animation-delay:var(--d),calc(var(--d) + 1.4s)
+}
+#orn svg:nth-child(odd){color:var(--c1)}
+#orn svg:nth-child(even){color:var(--gold)}
+@keyframes ornIn{to{opacity:var(--op,.8)}}
+@keyframes twk{
+  0%{transform:translate(-50%,-50%) rotate(var(--r,0deg)) scale(.95);filter:drop-shadow(0 0 6px currentColor)}
+  50%{transform:translate(-50%,-58%) rotate(calc(var(--r,0deg) + 6deg)) scale(.72);filter:drop-shadow(0 0 14px currentColor)}
+  100%{transform:translate(-50%,-46%) rotate(calc(var(--r,0deg) - 6deg)) scale(1.05);filter:drop-shadow(0 0 8px currentColor)}
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* thanh tiến trình + nút âm thanh */
+#top{position:fixed;left:0;right:0;top:0;z-index:20;display:flex;align-items:center;gap:12px;padding:calc(12px + var(--st)) max(14px,env(safe-area-inset-right)) 0 max(14px,env(safe-area-inset-left));pointer-events:none}
+#dots{flex:1;display:flex;gap:4px}
+.seg{flex:1;height:3.5px;border-radius:3px;background:rgba(255,255,255,.16);overflow:hidden;backdrop-filter:blur(4px)}
+.seg i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--c1),var(--gold));border-radius:3px;box-shadow:0 0 10px var(--c1)}
+.seg.done i{width:100%}
+.seg.cur i{animation:fill var(--dur,3s) linear forwards}
+@keyframes fill{to{width:100%}}
+#mute{pointer-events:auto;width:42px;height:42px;border-radius:50%;border:1px solid rgba(255,255,255,.32);background:rgba(255,255,255,.1);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);display:grid;place-items:center;position:relative;transition:transform .2s,background .2s,box-shadow .2s;box-shadow:0 4px 16px rgba(0,0,0,.3)}
+#mute:hover{background:rgba(255,255,255,.2);transform:scale(1.06)}
+#mute:active{transform:scale(.9)}
+#mute svg{width:19px;height:19px;transition:opacity .2s;filter:drop-shadow(0 0 4px rgba(255,255,255,.5))}
+#mute.muted svg{opacity:.4}
+#mute.muted::after{content:"";position:absolute;width:24px;height:2px;background:#fff;transform:rotate(-45deg);border-radius:2px;box-shadow:0 0 6px rgba(255,255,255,.8)}
+
+/* sân khấu */
+#stage{position:fixed;inset:0;z-index:5}
+
+/* BÔNG HOA NGHỆ THUẬT: Đỉnh cao chi tiết & chuyển động */
+#flower{
+  position:absolute;left:50%;top:calc(6.2% + var(--st));width:min(78vw,44vh);aspect-ratio:320/375;
+  transform:translateX(-50%) scale(var(--fs,1));transform-origin:50% 0;overflow:visible;
+  transition:--c1 1.6s ease,--c2 1.6s ease,transform 1.2s cubic-bezier(.6,.05,.2,1);
+  animation:flFloat 6.5s ease-in-out infinite;
+  filter:drop-shadow(0 16px 38px color-mix(in srgb,var(--c2) 55%,transparent));
+}
+@keyframes flFloat{
+  0%,100%{transform:translateX(-50%) translateY(0) scale(var(--fs,1)) rotate(0deg)}
+  50%{transform:translateX(-50%) translateY(-11px) scale(var(--fs,1)) rotate(1.2deg)}
+}
+
+/* Các tầng cánh hoa nở xoay quanh gốc (0,0) */
+.pt{transform-origin:0 0;will-change:transform}
+.pt-l1{
+  transform:rotate(calc(var(--a)*var(--o)*1.05deg)) scale(calc(.85 + .28*var(--o)));
+  transition:transform 1.8s cubic-bezier(.22,1,.36,1);
+}
+.pt-l2{
+  transform:rotate(calc(var(--a)*var(--o)*.95deg)) scale(calc(.86 + .22*var(--o)));
+  transition:transform 1.9s cubic-bezier(.22,1,.36,1);
+}
+.pt-l3{
+  transform:rotate(calc(var(--a)*var(--o)*.85deg)) scale(calc(.88 + .16*var(--o)));
+  transition:transform 2.0s cubic-bezier(.22,1,.36,1);
+}
+.pt-l4{
+  transform:rotate(calc(var(--a)*var(--o)*.72deg)) scale(calc(.90 + .12*var(--o)));
+  transition:transform 2.1s cubic-bezier(.22,1,.36,1);
+}
+.pt-sepal{
+  transform-origin:0 0;
+  transform:rotate(calc(var(--sa)*var(--o)*1.08deg + var(--sa)*.12deg)) scale(calc(.92 + .2*var(--o)));
+  transition:transform 1.8s cubic-bezier(.22,1,.36,1);
+}
+
+/* Vầng sáng & vòng quỹ đạo thần tiên */
+.spin{transform-box:view-box;transform-origin:0px -12px;animation:spin 36s linear infinite}
+.spin-rev{transform-box:view-box;transform-origin:0px -12px;animation:spin 28s linear infinite reverse}
+.spin-slow{transform-box:view-box;transform-origin:0px -12px;animation:spin 64s linear infinite}
+.spin-stamen{transform-box:view-box;transform-origin:0px -32px;animation:spin 18s linear infinite}
+
+#glow{
+  transform:scale(calc(.92 + var(--p)*.18 + var(--o)*.22));transform-origin:0 -12px;
+  opacity:calc(.48 + var(--p)*.3);transition:transform .4s ease,opacity .4s ease;
+}
+
+/* Khuôn mặt bé Nụ khi còn là nụ hoa */
+#face{
+  opacity:max(0,calc(1 - var(--o)*2.8));transform-origin:0 -54px;
+  transform:scale(calc(1 - var(--o)*.2));transition:opacity .6s ease,transform .6s ease;
+}
+
+/* Nhụy & nhị hoa vàng óng khi nở */
+#pist{
+  opacity:max(0,min(1,calc((var(--o) - .25)*2.5)));transform-origin:0 -32px;
+  transform:scale(calc((.4 + .6*var(--o))*(1 + var(--p)*.16)));
+  transition:opacity .9s ease,transform .9s cubic-bezier(.2,.9,.3,1.2);
+}
+
+/* Thân cành & lá đung đưa tự nhiên */
+#stem-wrap{transform-origin:0 36px;animation:stemBreathe 6s ease-in-out infinite}
+@keyframes stemBreathe{0%,100%{transform:rotate(0deg)}50%{transform:rotate(-.9deg)}}
+.leaf-l{transform-origin:-2px 88px;animation:leafSwayL 6.2s ease-in-out infinite}
+.leaf-r{transform-origin:1px 108px;animation:leafSwayR 5.5s ease-in-out infinite}
+@keyframes leafSwayL{0%,100%{transform:rotate(0deg)}50%{transform:rotate(-2.8deg)}}
+@keyframes leafSwayR{0%,100%{transform:rotate(0deg)}50%{transform:rotate(2.6deg)}}
+
+/* Điều chỉnh tỷ lệ kích thước hoa theo từng cảnh */
+body[data-v=date] #flower{--fs:.62}
+body[data-v=final] #flower{--fs:.78}
+body[data-v=names] #flower{--fs:.60}
+
+#big{position:absolute;left:0;right:0;top:49%;text-align:center;pointer-events:none;z-index:6}
+body[data-v=date] #big{top:38%}
+#big b{
+  display:inline-block;font-family:var(--script);font-weight:400;font-size:clamp(44px,14.5vw,86px);line-height:1.1;padding:0 .1em;
+  background:linear-gradient(180deg,#fff 8%,var(--c1) 56%,var(--gold) 115%);-webkit-background-clip:text;background-clip:text;color:transparent;
+  filter:drop-shadow(0 0 24px color-mix(in srgb,var(--c2) 75%,transparent));animation:bigIn 1s cubic-bezier(.2,.9,.3,1.2) both;
+}
+body[data-v=date] #big b{font-size:clamp(78px,27vw,170px)}
+#big small{display:block;margin-top:.35em;letter-spacing:.34em;text-transform:uppercase;font-size:clamp(11px,3vw,15px);color:#ffe4f2;text-shadow:0 0 10px rgba(0,0,0,.6);animation:bigIn 1s .25s both}
+@keyframes bigIn{from{opacity:0;transform:translateY(24px) scale(.86);filter:blur(10px)}}
+
+#cap{position:absolute;z-index:6;left:6%;right:6%;bottom:calc(8% + var(--sb));display:flex;justify-content:center;pointer-events:none;transition:opacity .5s}
+#cap.off{opacity:0}
+#line{
+  position:relative;max-width:30em;text-align:center;font-size:clamp(17px,4.7vw,26px);line-height:1.55;font-weight:600;padding:.65em 1.1em;border-radius:1.4em;
+  background:linear-gradient(160deg,rgba(255,255,255,.16),rgba(255,255,255,.04));border:1px solid rgba(255,255,255,.2);
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);text-shadow:0 2px 14px rgba(0,0,0,.6);box-shadow:0 16px 44px rgba(0,0,0,.3)
+}
+#line em{font-style:normal;font-family:var(--script);font-weight:400;color:var(--c1);text-shadow:0 0 18px color-mix(in srgb,var(--c1) 85%,transparent)}
+.w{display:inline-block;opacity:0;transform:translateY(10px);animation:wIn .65s cubic-bezier(.2,.8,.2,1) forwards;white-space:pre}
+@keyframes wIn{to{opacity:1;transform:none}}
+body[data-v=final] #cap,body[data-v=final] #big{opacity:0}
+
+/* Tên các bạn nữ */
+#chips{position:absolute;z-index:6;left:5%;right:5%;top:47%;display:flex;flex-wrap:wrap;justify-content:center;gap:.55em;max-height:27%;overflow:hidden;pointer-events:none}
+.chip{
+  padding:.34em .95em;border-radius:2em;border:1px solid color-mix(in srgb,var(--c1) 75%,transparent);
+  background:linear-gradient(135deg,color-mix(in srgb,var(--c1) 18%,transparent),rgba(255,255,255,.06));
+  font-size:clamp(12px,3.4vw,16px);color:#fff5fa;
+  box-shadow:0 0 16px color-mix(in srgb,var(--c1) 35%,transparent),inset 0 0 10px color-mix(in srgb,var(--c1) 15%,transparent);
+  opacity:0;transform:scale(.5);animation:chip .75s cubic-bezier(.2,.9,.3,1.4) forwards;animation-delay:var(--d)
+}
+#chips.dense .chip{font-size:clamp(10.5px,2.8vw,13px);padding:.22em .7em}
+@keyframes chip{to{opacity:1;transform:none}}
+body[data-v=names] #big{top:41%}
+body[data-v=names] #big b{font-size:clamp(34px,10vw,58px)}
+body[data-v=names] #chips{top:52%}
+
+/* Thẻ kết */
+#final{position:absolute;z-index:7;left:0;right:0;bottom:calc(5% + var(--sb));display:flex;justify-content:center;padding:0 5%;opacity:0;pointer-events:none;transform:translateY(32px) scale(.95);transition:opacity .9s,transform .9s cubic-bezier(.2,.9,.3,1.1)}
+#final.on{opacity:1;pointer-events:auto;transform:none}
+.card{
+  position:relative;width:min(100%,440px);text-align:center;padding:1.3em 1.4em 1.2em;border-radius:2em;
+  background:linear-gradient(160deg,rgba(255,255,255,.19),rgba(255,255,255,.05));border:1px solid rgba(255,225,245,.5);
+  box-shadow:0 26px 65px rgba(35,5,55,.65),inset 0 0 32px rgba(255,160,215,.14);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);animation:glow 3.6s ease-in-out infinite
+}
+.card::before{
+  content:"";position:absolute;inset:-1px;border-radius:inherit;padding:1px;
+  background:linear-gradient(135deg,var(--gold),transparent 40%,var(--c1) 70%,transparent);
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none;opacity:.8
+}
+@keyframes glow{50%{box-shadow:0 26px 75px color-mix(in srgb,var(--c1) 40%,transparent),inset 0 0 40px rgba(255,160,215,.25)}}
+.crown{display:block;width:36px;height:36px;margin:0 auto .15em;color:var(--gold);filter:drop-shadow(0 0 12px rgba(255,217,138,.85));animation:bobCrown 3.4s ease-in-out infinite}
+@keyframes bobCrown{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+.f-sub{font-size:clamp(11px,3vw,13px);letter-spacing:.34em;text-transform:uppercase;color:#ffe4f2}
+.card h1{font-family:var(--script);font-weight:400;font-size:clamp(26px,7.6vw,42px);line-height:1.2;white-space:nowrap;margin:.12em 0;text-shadow:0 0 24px color-mix(in srgb,var(--c1) 85%,transparent)}
+.f-date{font-family:var(--script);font-size:clamp(26px,7.6vw,42px);color:var(--gold);text-shadow:0 0 22px rgba(255,200,120,.7)}
+.rule{display:flex;align-items:center;gap:.6em;justify-content:center;margin:.5em auto;max-width:14em;color:var(--c1)}
+.rule::before,.rule::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,transparent,currentColor)}
+.rule::after{transform:scaleX(-1)}
+.rule svg{width:16px;height:16px}
+#f-to{margin:.2em 0 .2em;font-size:clamp(14px,3.8vw,17px);font-weight:600}
+.f-msg{font-size:clamp(12.5px,3.4vw,15px);line-height:1.6;color:#fff0f7;max-width:26em;margin:0 auto}
+.acts{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;margin-top:.95em}
+.acts button{
+  position:relative;overflow:hidden;flex:1 1 40%;min-height:48px;padding:.65em 1.3em;border-radius:2.2em;
+  border:1px solid var(--c1);background:linear-gradient(135deg,color-mix(in srgb,var(--c1) 22%,transparent),color-mix(in srgb,var(--c1) 8%,transparent));
+  box-shadow:0 0 18px color-mix(in srgb,var(--c1) 45%,transparent);font-weight:600;font-size:14.5px;
+  transition:transform .2s cubic-bezier(.2,.9,.3,1.4),filter .2s,box-shadow .2s
+}
+.acts button:hover{box-shadow:0 0 26px color-mix(in srgb,var(--c1) 75%,transparent);filter:brightness(1.15)}
+.acts button.alt{border-color:rgba(255,255,255,.45);background:rgba(255,255,255,.09);box-shadow:none}
+.acts button:active{transform:scale(.93);filter:brightness(1.3)}
+.sign{margin-top:.85em;font-family:var(--script);font-size:14.5px;color:var(--gold);opacity:.95}
+
+/* Màn mở quà */
+#start{
+  position:fixed;inset:0;z-index:40;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:1.15em;text-align:center;padding:24px;cursor:pointer;overflow:hidden;
+  background:radial-gradient(110% 70% at 50% 25%,#4a1f6e,#1a0b3c 58%,#07030f);
+  transition:opacity 1s,visibility 1s;
+}
+#start::before,#start::after{content:"";position:absolute;border-radius:50%;filter:blur(60px);opacity:.55;animation:orb 9s ease-in-out infinite;pointer-events:none}
+#start::before{width:62vmax;height:62vmax;left:-20vmax;top:-18vmax;background:radial-gradient(circle,rgba(255,122,184,.45),transparent 65%)}
+#start::after{width:56vmax;height:56vmax;right:-22vmax;bottom:-20vmax;background:radial-gradient(circle,rgba(169,155,255,.45),transparent 65%);animation-delay:-4.5s}
+@keyframes orb{50%{transform:translate(6vmax,4vmax) scale(1.15)}}
+#start>*{position:relative;z-index:1}
+#start.gone{opacity:0;visibility:hidden;pointer-events:none}
+
+.bud{width:min(42vw,180px);aspect-ratio:1;display:grid;place-items:center;position:relative}
+.bud svg{width:86%;height:86%;animation:budBob 4s ease-in-out infinite;filter:drop-shadow(0 0 32px rgba(255,125,188,.95))}
+@keyframes budBob{0%,100%{transform:translateY(0) scale(1) rotate(0deg)}50%{transform:translateY(-8px) scale(1.03) rotate(1deg)}}
+
+.bud .ring{position:absolute;inset:0;border-radius:50%;border:1px solid rgba(255,180,220,.55);animation:ring 3.6s ease-out infinite}
+.bud .ring:nth-child(2){animation-delay:1.2s}
+.bud .ring:nth-child(3){animation-delay:2.4s}
+@keyframes ring{from{transform:scale(.55);opacity:.95}to{transform:scale(1.55);opacity:0}}
+
+#start .k{letter-spacing:.36em;text-transform:uppercase;font-size:12px;color:#ffd7ea}
+#start h2{font-family:var(--script);font-weight:400;font-size:clamp(34px,10vw,58px);line-height:1.2;text-shadow:0 0 28px rgba(255,130,190,.8)}
+#start h2 em{font-style:normal;color:var(--gold)}
+#start p{
+  padding:.85em 2em;min-height:52px;border:1px solid var(--c1);border-radius:2.2em;font-size:clamp(13px,3.6vw,16px);
+  letter-spacing:.16em;color:#ffeef6;background:linear-gradient(135deg,rgba(255,255,255,.14),rgba(255,255,255,.03));
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);animation:beat 2.4s ease-in-out infinite
+}
+@keyframes beat{0%,100%{box-shadow:0 0 16px rgba(255,122,184,.5)}50%{transform:scale(1.06);box-shadow:0 0 42px rgba(255,122,184,.95)}}
+#start small{position:absolute;bottom:calc(18px + var(--sb));font-size:12px;color:rgba(255,255,255,.55)}
+
+@media (orientation:landscape) and (max-height:520px){
+  #flower{width:min(30vw,52vh);left:20%}
+  #big,#chips{left:36%;right:3%}
+  #cap{left:36%;right:3%}
+  #final{left:34%;padding:0 3%}
+}
+@media (prefers-reduced-motion:reduce){
+  #flower,.card,.bud svg,.bud .ring,#start p,.seg.cur i,.spin,.spin-rev,.spin-slow,.crown,#orn svg{animation:none!important}
+  #orn svg{opacity:.7}
+}
+</style>
+</head>
+<body data-v="hero">
+
+<!-- BỘ BIỂU TƯỢNG SVG XỊN XÒ NGHỆ THUẬT -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <!-- Ngôi sao kim cương phát sáng -->
+  <symbol id="s-star" viewBox="-14 -14 28 28">
+    <path fill="currentColor" d="M0-14 C1.2-4 4-1.2 14 0 C4 1.2 1.2 4 0 14 C-1.2 4-4 1.2-14 0 C-4-1.2-1.2-4 0-14 Z"/>
+    <path fill="currentColor" opacity=".6" transform="rotate(45) scale(.45)" d="M0-14 C1.2-4 4-1.2 14 0 C4 1.2 1.2 4 0 14 C-1.2 4-4 1.2-14 0 C-4-1.2-1.2-4 0-14 Z"/>
+    <circle r="1.5" fill="#fff" opacity=".95"/>
+    <path fill="currentColor" opacity=".85" transform="translate(9.5 -9.5) scale(.35)" d="M0-14 C1.2-4 4-1.2 14 0 C4 1.2 1.2 4 0 14 C-1.2 4-4 1.2-14 0 C-4-1.2-1.2-4 0-14 Z"/>
+  </symbol>
+
+  <!-- Trái tim thủy tinh bóng lộng lẫy -->
+  <symbol id="s-heart" viewBox="-14 -14 28 28">
+    <path fill="currentColor" d="M 0 11.5 C -4 8, -12 2.5, -12 -4.5 C -12 -9.5, -8.5 -12.5, -4.6 -12.5 C -2.2 -12.5, -0.8 -11.2, 0 -9.4 C 0.8 -11.2, 2.2 -12.5, 4.6 -12.5 C 8.5 -12.5, 12 -9.5, 12 -4.5 C 12 2.5, 4 8, 0 11.5 Z"/>
+    <path d="M -8.5 -4.5 C -8.5 -8.5, -6 -10.5, -3.5 -10.5 C -2 -10.5, -0.8 -9.5, 0 -8" stroke="#ffffff" stroke-width="1.5" stroke-linecap="round" fill="none" opacity=".7"/>
+    <circle cx="6" cy="-6" r="1.2" fill="#ffffff" opacity=".75"/>
+  </symbol>
+
+  <!-- Mặt trăng lưỡi liềm bầu trời sao -->
+  <symbol id="s-moon" viewBox="-14 -14 28 28">
+    <path fill="currentColor" d="M 4 -12 C 10 -10, 13 -4, 11 3 C 9 9, 3 13, -4 13 C -8 13, -11 11.5, -13 9.5 C -7 11.5, 0 8, 2 2 C 3.8 -3.5, 1 -9.5, -4 -11.5 C -1 -12.2, 1.5 -12.5, 4 -12 Z"/>
+    <path fill="currentColor" opacity=".95" transform="translate(6 -5) scale(.3)" d="M0-12 C1-3 3-1 12 0 C3 1 1 3 0 12 C-1 3-3 1-12 0 C-3-1-1-3 0-12 Z"/>
+    <circle cx="-1" cy="7" r="1" fill="#fff" opacity=".5"/>
+  </symbol>
+
+  <!-- Mặt trời rạng ngời tia sáng đan xen -->
+  <symbol id="s-sun" viewBox="-14 -14 28 28">
+    <circle r="5" fill="currentColor"/>
+    <circle r="3" fill="#ffffff" opacity=".35"/>
+    <g fill="currentColor">
+      <path d="M-1 -13 L1 -13 L1.5 -7 L-1.5 -7 Z"/>
+      <path d="M-1 -13 L1 -13 L1.5 -7 L-1.5 -7 Z" transform="rotate(45)"/>
+      <path d="M-1 -13 L1 -13 L1.5 -7 L-1.5 -7 Z" transform="rotate(90)"/>
+      <path d="M-1 -13 L1 -13 L1.5 -7 L-1.5 -7 Z" transform="rotate(135)"/>
+      <path d="M-1 -13 L1 -13 L1.5 -7 L-1.5 -7 Z" transform="rotate(180)"/>
+      <path d="M-1 -13 L1 -13 L1.5 -7 L-1.5 -7 Z" transform="rotate(225)"/>
+      <path d="M-1 -13 L1 -13 L1.5 -7 L-1.5 -7 Z" transform="rotate(270)"/>
+      <path d="M-1 -13 L1 -13 L1.5 -7 L-1.5 -7 Z" transform="rotate(315)"/>
+      <circle cx="0" cy="-6.8" r="0.9" transform="rotate(22.5)" fill="#fff" opacity=".85"/>
+      <circle cx="0" cy="-6.8" r="0.9" transform="rotate(67.5)" fill="#fff" opacity=".85"/>
+      <circle cx="0" cy="-6.8" r="0.9" transform="rotate(112.5)" fill="#fff" opacity=".85"/>
+      <circle cx="0" cy="-6.8" r="0.9" transform="rotate(157.5)" fill="#fff" opacity=".85"/>
+      <circle cx="0" cy="-6.8" r="0.9" transform="rotate(202.5)" fill="#fff" opacity=".85"/>
+      <circle cx="0" cy="-6.8" r="0.9" transform="rotate(247.5)" fill="#fff" opacity=".85"/>
+      <circle cx="0" cy="-6.8" r="0.9" transform="rotate(292.5)" fill="#fff" opacity=".85"/>
+      <circle cx="0" cy="-6.8" r="0.9" transform="rotate(337.5)" fill="#fff" opacity=".85"/>
+    </g>
+  </symbol>
+
+  <!-- Chiếc lá nghệ thuật với gân lá thanh mảnh -->
+  <symbol id="s-leaf" viewBox="-14 -14 28 28">
+    <path fill="currentColor" d="M -11 11 C -13 -2, -5 -11, 11 -12 C 12 4, 3 12, -11 11 Z"/>
+    <path fill="none" stroke="#fff" stroke-opacity=".75" stroke-width="1.2" stroke-linecap="round" d="M -9 9 C -1 2, 4 -4, 9 -10"/>
+    <path fill="none" stroke="#fff" stroke-opacity=".5" stroke-width="0.8" stroke-linecap="round" d="M -4 5 Q -2 1 1 0 M -1 2 Q 2 -2 5 -3 M -6 7 Q -7 3 -6 0"/>
+    <circle cx="3" cy="-4" r="1.1" fill="#fff" opacity=".85"/>
+  </symbol>
+
+  <!-- Nàng bướm tiên cánh hoa lộng lẫy -->
+  <symbol id="s-bfly" viewBox="-14 -14 28 28">
+    <path fill="currentColor" d="M -1 -1 C -4 -10, -13 -11, -12 -4 C -11 1, -5 2, -1 -1 Z"/>
+    <path fill="currentColor" opacity=".85" d="M 1 -1 C 4 -10, 13 -11, 12 -4 C 11 1, 5 2, 1 -1 Z"/>
+    <ellipse cx="-6.5" cy="-5" rx="2.5" ry="1.4" fill="#ffffff" opacity=".45" transform="rotate(25 -6.5 -5)"/>
+    <ellipse cx="6.5" cy="-5" rx="2.5" ry="1.4" fill="#ffffff" opacity=".45" transform="rotate(-25 6.5 -5)"/>
+    <path fill="currentColor" opacity=".7" d="M -1 0 C -7 1, -10 6.5, -7 10 C -4 11.5, -1 7, -1 0 Z"/>
+    <path fill="currentColor" opacity=".7" d="M 1 0 C 7 1, 10 6.5, 7 10 C 4 11.5, 1 7, 1 0 Z"/>
+    <rect x="-1" y="-6" width="2" height="12" rx="1" fill="#fff" opacity=".95"/>
+    <path fill="none" stroke="#fff" stroke-width="1" stroke-linecap="round" d="M -0.5 -6 C -2 -9, -5 -10, -6 -9 M 0.5 -6 C 2 -9, 5 -10, 6 -9"/>
+    <circle cx="-6" cy="-9" r="0.8" fill="#fff"/>
+    <circle cx="6" cy="-9" r="0.8" fill="#fff"/>
+  </symbol>
+
+  <!-- Cuốn nhật ký cổ tích với dải ruy băng -->
+  <symbol id="s-book" viewBox="-14 -14 28 28">
+    <path fill="currentColor" d="M -1 -7 C -4.5 -9.5, -9 -9.5, -12 -8 L -12 8 C -9 6.5, -4.5 6.5, -1 9 Z"/>
+    <path fill="currentColor" opacity=".75" d="M 1 -7 C 4.5 -9.5, 9 -9.5, 12 -8 L 12 8 C 9 6.5, 4.5 6.5, 1 9 Z"/>
+    <path fill="none" stroke="#fff" stroke-opacity=".7" stroke-width="1" d="M -1 -7 V 9 M -10 -5.5 C -7.5 -7, -4 -7, -1 -5 M 10 -5.5 C 7.5 -7, 4 -7, 1 -5"/>
+    <path d="M 0 -6 L 0 4 L 2 2.5 L 4 4 L 4 -6 Z" fill="var(--gold)"/>
+  </symbol>
+
+  <!-- Vương miện công chúa gắn đá quý -->
+  <symbol id="s-crown" viewBox="-14 -14 28 28">
+    <path fill="currentColor" d="M -12 5 L -13 -7 L -6 -1 L 0 -11 L 6 -1 L 13 -7 L 12 5 Z"/>
+    <rect x="-12" y="6" width="24" height="3.5" rx="1.75" fill="currentColor"/>
+    <circle cx="-13" cy="-7" r="1.8" fill="#fff"/>
+    <circle cx="0" cy="-11" r="2.2" fill="#fff"/>
+    <circle cx="13" cy="-7" r="1.8" fill="#fff"/>
+    <circle cx="-6" cy="-1" r="1.3" fill="var(--gold)"/>
+    <circle cx="6" cy="-1" r="1.3" fill="var(--gold)"/>
+    <circle cx="-6" cy="7.7" r="1.1" fill="#fff" opacity=".85"/>
+    <circle cx="0" cy="7.7" r="1.3" fill="var(--gold)"/>
+    <circle cx="6" cy="7.7" r="1.1" fill="#fff" opacity=".85"/>
+  </symbol>
+
+  <!-- Viên kim cương đa giác cắt tinh xảo -->
+  <symbol id="s-gem" viewBox="-14 -14 28 28">
+    <path fill="currentColor" d="M -10 -5 L -5 -11 L 5 -11 L 10 -5 L 0 11 Z"/>
+    <path fill="none" stroke="#fff" stroke-opacity=".8" stroke-width="1" stroke-linejoin="round" d="M -10 -5 H 10 M -5 -11 L -2.5 -5 L 0 11 L 2.5 -5 L 5 -11 M -2.5 -5 H 2.5"/>
+    <polygon points="-2.5,-5 0,11 2.5,-5" fill="#fff" opacity=".25"/>
+    <polygon points="0,-11 5,-11 2.5,-5" fill="#fff" opacity=".35"/>
+  </symbol>
+
+  <!-- Đôi nhẫn gắn kết ánh vàng & đá quý -->
+  <symbol id="s-ring" viewBox="-14 -14 28 28">
+    <circle cx="-3" cy="1" r="7" fill="none" stroke="currentColor" stroke-width="2.2"/>
+    <circle cx="3" cy="-1" r="7" fill="none" stroke="currentColor" stroke-width="2.2" opacity=".8"/>
+    <path fill="none" stroke="#fff" stroke-width="1" stroke-linecap="round" d="M -7 -2 A 7 7 0 0 1 -1 -6"/>
+    <path d="M 3 -9.5 L 1 -12.5 L 5 -12.5 Z" fill="#fff"/>
+    <circle cx="3" cy="-11" r="1.4" fill="var(--gold)"/>
+  </symbol>
+</svg>
+
+<canvas id="fx"></canvas><div id="vig"></div><div id="orn"></div>
+<header id="top"><div id="dots"></div><button id="mute" aria-label="Bật/tắt nhạc"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l11-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="17" cy="16" r="3"/></svg></button></header>
+
+<main id="stage">
+
+<!-- BÔNG HOA "NỤ" THẦN TIÊN 11A5: ĐỈNH CAO SVG & CHUYỂN ĐỘNG NỞ HOA -->
+<svg id="flower" viewBox="-160 -185 320 375" aria-hidden="true">
+  <defs>
+    <!-- Các dải màu chuyển tiếp cho cánh hoa nhiều tầng -->
+    <linearGradient id="pg-back" x1="0" y1="1" x2="0" y2="0">
+      <stop offset="0%" style="stop-color:var(--c2)"/>
+      <stop offset="50%" style="stop-color:var(--c1)"/>
+      <stop offset="88%" style="stop-color:#fff2f7"/>
+      <stop offset="100%" style="stop-color:#ffffff"/>
+    </linearGradient>
+
+    <linearGradient id="pg-mid" x1="0" y1="1" x2="0" y2="0">
+      <stop offset="0%" style="stop-color:var(--c2);stop-opacity:.92"/>
+      <stop offset="45%" style="stop-color:var(--c1)"/>
+      <stop offset="85%" style="stop-color:#ffecf5"/>
+      <stop offset="100%" style="stop-color:#ffffff"/>
+    </linearGradient>
+
+    <linearGradient id="pg-front" x1="0" y1="1" x2="0" y2="0">
+      <stop offset="0%" style="stop-color:var(--c1)"/>
+      <stop offset="55%" style="stop-color:#ffd5e8"/>
+      <stop offset="90%" style="stop-color:#fff2f8"/>
+      <stop offset="100%" style="stop-color:#ffffff"/>
+    </linearGradient>
+
+    <linearGradient id="pg-core" x1="0" y1="1" x2="0" y2="0">
+      <stop offset="0%" style="stop-color:var(--c2)"/>
+      <stop offset="50%" style="stop-color:var(--c1)"/>
+      <stop offset="82%" style="stop-color:#ffe3b0"/>
+      <stop offset="100%" style="stop-color:#fffdf5"/>
+    </linearGradient>
+
+    <!-- Thân cành, lá, đài hoa và giọt sương -->
+    <linearGradient id="stem-grad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#14563b"/>
+      <stop offset="35%" stop-color="#3ed298"/>
+      <stop offset="70%" stop-color="#249c6d"/>
+      <stop offset="100%" stop-color="#114a33"/>
+    </linearGradient>
+
+    <linearGradient id="leaf-grad-l" x1="1" y1="1" x2="0" y2="0">
+      <stop offset="0%" stop-color="#134d35"/>
+      <stop offset="50%" stop-color="#2eb884"/>
+      <stop offset="100%" stop-color="#6df5c2"/>
+    </linearGradient>
+
+    <linearGradient id="leaf-grad-r" x1="0" y1="1" x2="1" y2="0">
+      <stop offset="0%" stop-color="#134d35"/>
+      <stop offset="50%" stop-color="#2eb884"/>
+      <stop offset="100%" stop-color="#6df5c2"/>
+    </linearGradient>
+
+    <linearGradient id="sepal-grad" x1="0" y1="1" x2="0" y2="0">
+      <stop offset="0%" stop-color="#114a33"/>
+      <stop offset="50%" stop-color="#249c6d"/>
+      <stop offset="100%" stop-color="#5fe3b2"/>
+    </linearGradient>
+
+    <radialGradient id="receptacle-grad" cx="50%" cy="30%" r="70%">
+      <stop offset="0%" stop-color="#46e2a6"/>
+      <stop offset="70%" stop-color="#20875e"/>
+      <stop offset="100%" stop-color="#0e3d2a"/>
+    </radialGradient>
+
+    <radialGradient id="dew-grad" cx="35%" cy="30%" r="65%">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="50%" stop-color="#b6f7df" stop-opacity=".9"/>
+      <stop offset="100%" stop-color="#135238" stop-opacity=".75"/>
+    </radialGradient>
+
+    <!-- Nhụy & nhị hoa hoàng gia -->
+    <radialGradient id="core-gold" cx="40%" cy="35%" r="65%">
+      <stop offset="0%" stop-color="#fffef0"/>
+      <stop offset="35%" stop-color="#ffe27a"/>
+      <stop offset="75%" stop-color="#f59e0b"/>
+      <stop offset="100%" stop-color="#b45309"/>
+    </radialGradient>
+
+    <radialGradient id="core-amber-glow">
+      <stop offset="0%" stop-color="#ffd566" stop-opacity=".85"/>
+      <stop offset="50%" stop-color="#f59e0b" stop-opacity=".35"/>
+      <stop offset="100%" stop-color="#f59e0b" stop-opacity="0"/>
+    </radialGradient>
+
+    <linearGradient id="stamen-grad" x1="0" y1="1" x2="0" y2="0">
+      <stop offset="0%" stop-color="#f59e0b"/>
+      <stop offset="70%" stop-color="#ffe27a"/>
+      <stop offset="100%" stop-color="#ffffff"/>
+    </linearGradient>
+
+    <!-- Vầng hào quang kỳ ảo -->
+    <radialGradient id="gl">
+      <stop offset="0%" style="stop-color:var(--c1)" stop-opacity=".55"/>
+      <stop offset="65%" style="stop-color:var(--c2)" stop-opacity=".2"/>
+      <stop offset="100%" style="stop-color:var(--c2)" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <!-- 1. VẦNG HÀO QUANG & CÁC VÒNG QUỸ ĐẠO THẦN TIÊN -->
+  <g id="celestial-aura">
+    <circle id="glow" cx="0" cy="-12" r="142" fill="url(#gl)"/>
+    <!-- Vòng quỹ đạo ánh sáng 1 -->
+    <circle class="spin" cx="0" cy="-12" r="150" fill="none" style="stroke:var(--c1)" stroke-opacity=".38" stroke-width="1.5" stroke-dasharray="2 9" stroke-linecap="round"/>
+    <!-- Vòng quỹ đạo hoàng kim 2 -->
+    <circle class="spin-rev" cx="0" cy="-12" r="164" fill="none" style="stroke:var(--gold)" stroke-opacity=".28" stroke-width="1.2" stroke-dasharray="28 14 3 14" stroke-linecap="round"/>
+    <!-- Điểm sao phương vị thiên hà 8 hướng -->
+    <g class="spin-slow" opacity=".35" style="fill:var(--gold)">
+      <circle cx="0" cy="-176" r="2.2"/>
+      <circle cx="0" cy="152"  r="2.2"/>
+      <circle cx="-164" cy="-12" r="2.2"/>
+      <circle cx="164"  cy="-12" r="2.2"/>
+      <circle cx="-116" cy="-128" r="1.5"/>
+      <circle cx="116"  cy="-128" r="1.5"/>
+      <circle cx="-116" cy="104"  r="1.5"/>
+      <circle cx="116"  cy="104"  r="1.5"/>
+    </g>
+  </g>
+
+  <!-- 2. THÂN CÀNH, LÁ VỚI GÂN LÁ & GIỌT SƯƠNG BAN MAI -->
+  <g id="stem-wrap">
+    <!-- Thân hoa mềm mại, có gân sáng tự nhiên -->
+    <path d="M -3 36 C -6 75, 4 125, -1 174 L 2 174 C 7 125, -3 75, 3 36 Z" fill="url(#stem-grad)"/>
+    <path d="M 0 36 C -3 75, 5 125, 0 174" stroke="rgba(255,255,255,0.45)" stroke-width="0.8" fill="none"/>
+    <!-- Gai hoa hồng mềm mại cách điệu -->
+    <path d="M 2 142 Q 7 141 10 144 Q 6 148 1 149 Z" fill="#207a55" opacity="0.85"/>
+    <path d="M -2 124 Q -7 123 -9 126 Q -5 130 -1 131 Z" fill="#207a55" opacity="0.85"/>
+
+    <!-- Lá bên trái với gân lá -->
+    <g class="leaf-l">
+      <path d="M -2 88 C -18 84, -40 74, -56 52 C -52 70, -32 94, -2 102 Z" fill="url(#leaf-grad-l)" filter="drop-shadow(0 4px 10px rgba(0,0,0,0.25))"/>
+      <path d="M -2 88 C -20 80, -38 68, -56 52" stroke="#9effd7" stroke-width="1.2" stroke-linecap="round" fill="none"/>
+      <path d="M -16 84 Q -22 76 -28 74" stroke="#9effd7" stroke-opacity="0.5" stroke-width="0.75" stroke-linecap="round" fill="none"/>
+      <path d="M -28 78 Q -36 70 -42 66" stroke="#9effd7" stroke-opacity="0.5" stroke-width="0.75" stroke-linecap="round" fill="none"/>
+      <path d="M -14 90 Q -20 92 -26 96" stroke="#9effd7" stroke-opacity="0.5" stroke-width="0.75" stroke-linecap="round" fill="none"/>
+    </g>
+
+    <!-- Lá bên phải với gân lá & giọt sương long lanh -->
+    <g class="leaf-r">
+      <path d="M 1 108 C 18 102, 38 92, 56 70 C 50 90, 32 116, 1 124 Z" fill="url(#leaf-grad-r)" filter="drop-shadow(0 4px 10px rgba(0,0,0,0.25))"/>
+      <path d="M 1 108 C 20 100, 38 86, 56 70" stroke="#9effd7" stroke-width="1.2" stroke-linecap="round" fill="none"/>
+      <path d="M 16 103 Q 22 95 28 92" stroke="#9effd7" stroke-opacity="0.5" stroke-width="0.75" stroke-linecap="round" fill="none"/>
+      <path d="M 28 96 Q 36 88 43 83" stroke="#9effd7" stroke-opacity="0.5" stroke-width="0.75" stroke-linecap="round" fill="none"/>
+      <path d="M 14 110 Q 20 112 26 116" stroke="#9effd7" stroke-opacity="0.5" stroke-width="0.75" stroke-linecap="round" fill="none"/>
+
+      <!-- Giọt sương mai đọng trên lá -->
+      <g transform="translate(35, 90)">
+        <ellipse cx="0" cy="0" rx="4.2" ry="3.2" fill="url(#dew-grad)"/>
+        <ellipse cx="-1.2" cy="-1" rx="1.5" ry="0.9" fill="#ffffff" opacity="0.95"/>
+        <circle cx="1.6" cy="1.2" r="0.6" fill="#ffffff" opacity="0.7"/>
+      </g>
+    </g>
+  </g>
+
+  <!-- 3. CÁC TẦNG CÁNH HOA, ĐÀI HOA & NHỤY HOA -->
+  <g id="flower-head" transform="translate(0 36)">
+
+    <!-- Đài hoa tầng sau (Sepals back) -->
+    <g id="sepals-back">
+      <path class="pt pt-sepal" style="--sa:-94" d="M0 0 C-8 -18 -15 -46 0 -68 C15 -46 8 -18 0 0 Z" fill="url(#sepal-grad)"/>
+      <path class="pt pt-sepal" style="--sa:94"  d="M0 0 C-8 -18 -15 -46 0 -68 C15 -46 8 -18 0 0 Z" fill="url(#sepal-grad)"/>
+    </g>
+
+    <!-- TẦNG 1: CÁNH NGOÀI CÙNG (7 cánh lớn, đường lượn mềm mại, có vệt sáng) -->
+    <g class="petals-l1" fill="url(#pg-back)" stroke="#fff" stroke-opacity=".65" stroke-width="1.2" stroke-linejoin="round">
+      <g class="pt pt-l1" style="--a:-84">
+        <path d="M0 0 C-20 -30 -42 -76 -38 -116 C-34 -138 -15 -148 0 -148 C15 -148 34 -138 38 -116 C42 -76 20 -30 0 0 Z"/>
+        <path d="M0 -15 C-12 -42 -22 -82 -14 -124" stroke="rgba(255,255,255,0.4)" stroke-width="1.3" stroke-linecap="round" fill="none"/>
+      </g>
+      <g class="pt pt-l1" style="--a:84">
+        <path d="M0 0 C-20 -30 -42 -76 -38 -116 C-34 -138 -15 -148 0 -148 C15 -148 34 -138 38 -116 C42 -76 20 -30 0 0 Z"/>
+        <path d="M0 -15 C12 -42 22 -82 14 -124" stroke="rgba(255,255,255,0.4)" stroke-width="1.3" stroke-linecap="round" fill="none"/>
+      </g>
+      <g class="pt pt-l1" style="--a:-56">
+        <path d="M0 0 C-20 -30 -42 -76 -38 -116 C-34 -138 -15 -148 0 -148 C15 -148 34 -138 38 -116 C42 -76 20 -30 0 0 Z"/>
+        <path d="M0 -15 C-12 -42 -22 -82 -14 -124" stroke="rgba(255,255,255,0.4)" stroke-width="1.3" stroke-linecap="round" fill="none"/>
+      </g>
+      <g class="pt pt-l1" style="--a:56">
+        <path d="M0 0 C-20 -30 -42 -76 -38 -116 C-34 -138 -15 -148 0 -148 C15 -148 34 -138 38 -116 C42 -76 20 -30 0 0 Z"/>
+        <path d="M0 -15 C12 -42 22 -82 14 -124" stroke="rgba(255,255,255,0.4)" stroke-width="1.3" stroke-linecap="round" fill="none"/>
+      </g>
+      <g class="pt pt-l1" style="--a:-28">
+        <path d="M0 0 C-20 -30 -42 -76 -38 -116 C-34 -138 -15 -148 0 -148 C15 -148 34 -138 38 -116 C42 -76 20 -30 0 0 Z"/>
+        <path d="M0 -15 C-10 -42 -18 -82 -10 -124" stroke="rgba(255,255,255,0.4)" stroke-width="1.3" stroke-linecap="round" fill="none"/>
+      </g>
+      <g class="pt pt-l1" style="--a:28">
+        <path d="M0 0 C-20 -30 -42 -76 -38 -116 C-34 -138 -15 -148 0 -148 C15 -148 34 -138 38 -116 C42 -76 20 -30 0 0 Z"/>
+        <path d="M0 -15 C10 -42 18 -82 10 -124" stroke="rgba(255,255,255,0.4)" stroke-width="1.3" stroke-linecap="round" fill="none"/>
+      </g>
+      <g class="pt pt-l1" style="--a:0">
+        <path d="M0 0 C-20 -30 -42 -76 -38 -116 C-34 -138 -15 -148 0 -148 C15 -148 34 -138 38 -116 C42 -76 20 -30 0 0 Z"/>
+        <path d="M0 -15 C0 -42 0 -82 0 -124" stroke="rgba(255,255,255,0.4)" stroke-width="1.3" stroke-linecap="round" fill="none"/>
+      </g>
+    </g>
+
+    <!-- TẦNG 2: CÁNH TẦNG GIỮA (6 cánh ôm so le) -->
+    <g class="petals-l2" fill="url(#pg-mid)" stroke="#fff" stroke-opacity=".72" stroke-width="1.2" stroke-linejoin="round">
+      <g class="pt pt-l2" style="--a:-68">
+        <path d="M0 0 C-18 -26 -36 -68 -32 -102 C-28 -122 -12 -134 0 -134 C12 -134 28 -122 32 -102 C36 -68 18 -26 0 0 Z"/>
+        <path d="M0 -12 C-10 -36 -18 -72 -10 -110" stroke="rgba(255,255,255,0.4)" stroke-width="1.2" stroke-linecap="round" fill="none"/>
+      </g>
+      <g class="pt pt-l2" style="--a:68">
+        <path d="M0 0 C-18 -26 -36 -68 -32 -102 C-28 -122 -12 -134 0 -134 C12 -134 28 -122 32 -102 C36 -68 18 -26 0 0 Z"/>
+        <path d="M0 -12 C10 -36 18 -72 10 -110" stroke="rgba(255,255,255,0.4)" stroke-width="1.2" stroke-linecap="round" fill="none"/>
+      </g>
+      <g class="pt pt-l2" style="--a:-41">
+        <path d="M0 0 C-18 -26 -36 -68 -32 -102 C-28 -122 -12 -134 0 -134 C12 -134 28 -122 32 -102 C36 -68 18 -26 0 0 Z"/>
+        <path d="M0 -12 C-10 -36 -18 -72 -10 -110" stroke="rgba(255,255,255,0.4)" stroke-width="1.2" stroke-linecap="round" fill="none"/>
+      </g>
+      <g class="pt pt-l2" style="--a:41">
+        <path d="M0 0 C-18 -26 -36 -68 -32 -102 C-28 -122 -12 -134 0 -134 C12 -134 28 -122 32 -102 C36 -68 18 -26 0 0 Z"/>
+        <path d="M0 -12 C10 -36 18 -72 10 -110" stroke="rgba(255,255,255,0.4)" stroke-width="1.2" stroke-linecap="round" fill="none"/>
+      </g>
+      <g class="pt pt-l2" style="--a:-14">
+        <path d="M0 0 C-18 -26 -36 -68 -32 -102 C-28 -122 -12 -134 0 -134 C12 -134 28 -122 32 -102 C36 -68 18 -26 0 0 Z"/>
+      </g>
+      <g class="pt pt-l2" style="--a:14">
+        <path d="M0 0 C-18 -26 -36 -68 -32 -102 C-28 -122 -12 -134 0 -134 C12 -134 28 -122 32 -102 C36 -68 18 -26 0 0 Z"/>
+      </g>
+    </g>
+
+    <!-- TẦNG 3: CÁNH TẦNG TRONG (5 cánh mềm mại) -->
+    <g class="petals-l3" fill="url(#pg-front)" stroke="#fff" stroke-opacity=".78" stroke-width="1.1" stroke-linejoin="round">
+      <path class="pt pt-l3" style="--a:-48" d="M0 0 C-15 -22 -30 -58 -26 -88 C-22 -106 -10 -118 0 -118 C10 -118 22 -106 26 -88 C30 -58 15 -22 0 0 Z"/>
+      <path class="pt pt-l3" style="--a:48"  d="M0 0 C-15 -22 -30 -58 -26 -88 C-22 -106 -10 -118 0 -118 C10 -118 22 -106 26 -88 C30 -58 15 -22 0 0 Z"/>
+      <path class="pt pt-l3" style="--a:-24" d="M0 0 C-15 -22 -30 -58 -26 -88 C-22 -106 -10 -118 0 -118 C10 -118 22 -106 26 -88 C30 -58 15 -22 0 0 Z"/>
+      <path class="pt pt-l3" style="--a:24"  d="M0 0 C-15 -22 -30 -58 -26 -88 C-22 -106 -10 -118 0 -118 C10 -118 22 -106 26 -88 C30 -58 15 -22 0 0 Z"/>
+      <path class="pt pt-l3" style="--a:0"   d="M0 0 C-15 -22 -30 -58 -26 -88 C-22 -106 -10 -118 0 -118 C10 -118 22 -106 26 -88 C30 -58 15 -22 0 0 Z"/>
+    </g>
+
+    <!-- TẦNG 4: CÁNH ÔM LÕI TRUNG TÂM (4 cánh ôm chặt nhụy) -->
+    <g class="petals-l4" fill="url(#pg-core)" stroke="#fff" stroke-opacity=".85" stroke-width="1.1" stroke-linejoin="round">
+      <path class="pt pt-l4" style="--a:-26" d="M0 0 C-12 -18 -24 -46 -20 -72 C-17 -88 -8 -98 0 -98 C8 -98 17 -88 20 -72 C24 -46 12 -18 0 0 Z"/>
+      <path class="pt pt-l4" style="--a:26"  d="M0 0 C-12 -18 -24 -46 -20 -72 C-17 -88 -8 -98 0 -98 C8 -98 17 -88 20 -72 C24 -46 12 -18 0 0 Z"/>
+      <path class="pt pt-l4" style="--a:-9"  d="M0 0 C-12 -18 -24 -46 -20 -72 C-17 -88 -8 -98 0 -98 C8 -98 17 -88 20 -72 C24 -46 12 -18 0 0 Z"/>
+      <path class="pt pt-l4" style="--a:9"   d="M0 0 C-12 -18 -24 -46 -20 -72 C-17 -88 -8 -98 0 -98 C8 -98 17 -88 20 -72 C24 -46 12 -18 0 0 Z"/>
+    </g>
+
+    <!-- 4. NHỤY VÀ NHỊ HOA VÀNG HOÀNG GIA (Hiện ra lộng lẫy khi hoa nở) -->
+    <g id="pist">
+      <!-- Vùng tỏa sáng hổ phách ấm áp -->
+      <circle cx="0" cy="-32" r="28" fill="url(#core-amber-glow)"/>
+      <circle cx="0" cy="-32" r="14" fill="url(#core-gold)"/>
+
+      <!-- 13 sợi chỉ nhị hoa uốn cong duyên dáng -->
+      <g stroke="url(#stamen-grad)" stroke-width="1.3" stroke-linecap="round" fill="none">
+        <path d="M 0 -32 Q -6 -48 -14 -50"/>
+        <path d="M 0 -32 Q -12 -44 -20 -42"/>
+        <path d="M 0 -32 Q -16 -36 -22 -30"/>
+        <path d="M 0 -32 Q -3 -52 -6 -56"/>
+        <path d="M 0 -32 Q 0 -54 0 -58"/>
+        <path d="M 0 -32 Q 3 -52 6 -56"/>
+        <path d="M 0 -32 Q 6 -48 14 -50"/>
+        <path d="M 0 -32 Q 12 -44 20 -42"/>
+        <path d="M 0 -32 Q 16 -36 22 -30"/>
+        <path d="M 0 -32 Q -10 -26 -16 -20"/>
+        <path d="M 0 -32 Q 10 -26 16 -20"/>
+        <path d="M 0 -32 Q -4 -22 -6 -16"/>
+        <path d="M 0 -32 Q 4 -22 6 -16"/>
+      </g>
+
+      <!-- Hạt phấn hoa vàng phát sáng lung linh -->
+      <g fill="#ffe680" filter="drop-shadow(0 0 4px rgba(255,215,0,0.85))">
+        <circle cx="-14" cy="-50" r="2.2"/>
+        <circle cx="-20" cy="-42" r="2.2"/>
+        <circle cx="-22" cy="-30" r="2.2"/>
+        <circle cx="-6"  cy="-56" r="2.2"/>
+        <circle cx="0"   cy="-58" r="2.5"/>
+        <circle cx="6"   cy="-56" r="2.2"/>
+        <circle cx="14"  cy="-50" r="2.2"/>
+        <circle cx="20"  cy="-42" r="2.2"/>
+        <circle cx="22"  cy="-30" r="2.2"/>
+        <circle cx="-16" cy="-20" r="2.0"/>
+        <circle cx="16"  cy="-20" r="2.0"/>
+        <circle cx="-6"  cy="-16" r="1.8"/>
+        <circle cx="6"   cy="-16" r="1.8"/>
+      </g>
+
+      <!-- Chòm sao lấp lánh ở tâm nhụy hoa -->
+      <g class="spin-stamen" fill="#ffffff" opacity=".95">
+        <path d="M 0 -36 Q 0.6 -33 3 -33 Q 0.6 -33 0 -30 Q -0.6 -33 -3 -33 Q -0.6 -33 0 -36 Z" transform="translate(0, -1) scale(1.4)"/>
+        <path d="M 0 -36 Q 0.6 -33 3 -33 Q 0.6 -33 0 -30 Q -0.6 -33 -3 -33 Q -0.6 -33 0 -36 Z" transform="translate(-7, 3) scale(0.9)"/>
+        <path d="M 0 -36 Q 0.6 -33 3 -33 Q 0.6 -33 0 -30 Q -0.6 -33 -3 -33 Q -0.6 -33 0 -36 Z" transform="translate(7, 3) scale(0.9)"/>
+      </g>
+    </g>
+
+    <!-- 5. GƯƠNG MẶT NÀNG TIÊN HOA "NỤ" DỄ THƯƠNG -->
+    <g id="face">
+      <!-- Má hồng ửng đào phát sáng với ánh sao -->
+      <ellipse cx="-20" cy="-52" rx="6.5" ry="3.6" fill="#ff6ea7" opacity="0.75"/>
+      <ellipse cx="20" cy="-52" rx="6.5" ry="3.6" fill="#ff6ea7" opacity="0.75"/>
+      <path d="M -20 -54 Q -19.5 -52 -18 -52 Q -19.5 -52 -20 -50 Q -20.5 -52 -22 -52 Q -20.5 -52 -20 -54 Z" fill="#fff" opacity="0.9"/>
+      <path d="M 20 -54 Q 20.5 -52 22 -52 Q 20.5 -52 20 -50 Q 19.5 -52 18 -52 Q 19.5 -52 20 -54 Z" fill="#fff" opacity="0.9"/>
+
+      <!-- Mắt nhắm cười hạnh phúc có hàng mi cong dịu dàng -->
+      <g fill="none" stroke="#ffffff" stroke-width="2.4" stroke-linecap="round">
+        <path d="M -21 -62 C -18 -68, -12 -68, -9 -62"/>
+        <path d="M -20 -64 L -24 -67"/>
+        <path d="M -18 -66 L -21 -70"/>
+
+        <path d="M 9 -62 C 12 -68, 18 -68, 21 -62"/>
+        <path d="M 20 -64 L 24 -67"/>
+        <path d="M 18 -66 L 21 -70"/>
+
+        <!-- Nụ cười e ấp ngọt ngào -->
+        <path d="M -5 -48 Q 0 -42 5 -48" stroke-width="2.2"/>
+      </g>
+
+      <!-- Chiếc vương miện nụ hoa nhỏ xinh đội đầu -->
+      <g transform="translate(0, -78)">
+        <path d="M -11 0 L -13 -8 L -6 -3 L 0 -10 L 6 -3 L 13 -8 L 11 0 Z" fill="var(--gold)" filter="drop-shadow(0 0 6px rgba(255,217,138,0.85))"/>
+        <circle cx="-13" cy="-8" r="1.5" fill="#fff"/>
+        <circle cx="0" cy="-10" r="1.8" fill="#fff"/>
+        <circle cx="13" cy="-8" r="1.5" fill="#fff"/>
+      </g>
+    </g>
+
+    <!-- 6. ĐÀI HOA TẦNG TRƯỚC (3 cánh đài xanh nâng đỡ) -->
+    <g id="sepals-front">
+      <path class="pt pt-sepal" style="--sa:-52" d="M0 0 C-7 -16 -13 -42 0 -62 C13 -42 7 -16 0 0 Z" fill="url(#sepal-grad)"/>
+      <path class="pt pt-sepal" style="--sa:52"  d="M0 0 C-7 -16 -13 -42 0 -62 C13 -42 7 -16 0 0 Z" fill="url(#sepal-grad)"/>
+      <path class="pt pt-sepal" style="--sa:0"   d="M0 0 C-7 -16 -13 -42 0 -62 C13 -42 7 -16 0 0 Z" fill="url(#sepal-grad)"/>
+    </g>
+
+    <!-- Đế hoa (Receptacle) kết nối cành & bông hoa -->
+    <path d="M -12 0 C -14 -8, 14 -8, 12 0 C 9 9, -9 9, -12 0 Z" fill="url(#receptacle-grad)"/>
+  </g>
+</svg>
+
+<div id="big"></div>
+<div id="chips"></div>
+<div id="cap"><div id="line"></div></div>
+
+<section id="final"><div class="card">
+  <svg class="crown" viewBox="-14 -14 28 28" aria-hidden="true"><use href="#s-crown"/></svg>
+  <div class="f-sub">chúc mừng ngày</div>
+  <h1>Phụ nữ Việt Nam</h1>
+  <div class="f-date">20 · 10</div>
+  <div class="rule"><svg viewBox="-14 -14 28 28"><use href="#s-heart"/></svg></div>
+  <p id="f-to"></p>
+  <p class="f-msg">mong mỗi ngày của các cậu đều có hoa, có nắng, có tiếng cười — và luôn có cả lớp ở bên.</p>
+  <div class="acts"><button id="b-heart">gửi tim ♥</button><button id="b-link" hidden>chép link</button><button id="b-replay" class="alt">xem lại</button></div>
+  <div class="sign">— Nụ &amp; 11A5 —</div>
+</div></section>
+</main>
+
+<!-- MÀN MỞ QUÀ VỚI NỤ HOA CỔ TÍCH -->
+<div id="start">
+  <div class="bud">
+    <span class="ring"></span><span class="ring"></span><span class="ring"></span>
+    <svg viewBox="-70 -90 140 180" aria-hidden="true">
+      <defs>
+        <linearGradient id="s-bg" x1="0" y1="1" x2="0" y2="0">
+          <stop offset="0%" stop-color="#ff4f93"/>
+          <stop offset="50%" stop-color="#ff8fbd"/>
+          <stop offset="100%" stop-color="#fff5f9"/>
+        </linearGradient>
+        <linearGradient id="s-st" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#3ed298"/>
+          <stop offset="100%" stop-color="#14563b"/>
+        </linearGradient>
+        <radialGradient id="s-glo">
+          <stop offset="0%" stop-color="#ff7ab8" stop-opacity="0.6"/>
+          <stop offset="100%" stop-color="#ff4f93" stop-opacity="0"/>
+        </radialGradient>
+      </defs>
+
+      <!-- Vầng hào quang nụ hoa -->
+      <circle cx="0" cy="-10" r="62" fill="url(#s-glo)"/>
+
+      <!-- Cành & chiếc lá có giọt sương -->
+      <path d="M 0 20 C -2 45, 3 65, 0 82" stroke="url(#s-st)" stroke-width="4.5" stroke-linecap="round" fill="none"/>
+      <path d="M 0 54 C 14 50, 26 40, 32 26 C 26 42, 14 58, 0 62 Z" fill="#2eb884"/>
+      <path d="M 0 54 C 15 48, 25 36, 32 26" stroke="#9effd7" stroke-width="1" fill="none"/>
+      <circle cx="20" cy="38" r="1.4" fill="#ffffff" opacity="0.9"/>
+
+      <!-- Đài hoa xanh nâng đỡ nụ -->
+      <path d="M -16 12 C -22 -2, -18 -24, -12 -38 C -8 -22, -6 -2, 0 16 Z" fill="#2eb884" opacity="0.9"/>
+      <path d="M 16 12 C 22 -2, 18 -24, 12 -38 C 8 -22, 6 -2, 0 16 Z" fill="#2eb884" opacity="0.9"/>
+      <path d="M 0 18 C -6 6, -8 -16, 0 -34 C 8 -16, 6 6, 0 18 Z" fill="#3ed298"/>
+
+      <!-- Các lớp cánh nụ hoa ôm ấp -->
+      <path d="M 0 16 C -26 6, -34 -32, 0 -64 C 34 -32, 26 6, 0 16 Z" fill="url(#s-bg)" stroke="#ffffff" stroke-width="1.5" stroke-opacity="0.8"/>
+      <path d="M 0 16 C -18 4, -22 -24, 0 -48 C 22 -24, 18 4, 0 16 Z" fill="#ffc2dd" opacity="0.65"/>
+      <path d="M 0 16 C -10 2, -12 -16, 0 -34 C 12 -16, 10 2, 0 16 Z" fill="#ffe2ef" opacity="0.8"/>
+
+      <!-- Bé Nụ mỉm cười -->
+      <ellipse cx="-13" cy="-22" rx="4.2" ry="2.4" fill="#ff4f93" opacity="0.75"/>
+      <ellipse cx="13" cy="-22" rx="4.2" ry="2.4" fill="#ff4f93" opacity="0.75"/>
+      <g fill="none" stroke="#ffffff" stroke-width="1.8" stroke-linecap="round">
+        <path d="M -14 -28 C -12 -32, -8 -32, -6 -28"/>
+        <path d="M 6 -28 C 8 -32, 12 -32, 14 -28"/>
+        <path d="M -3 -18 Q 0 -14 3 -18"/>
+      </g>
+      <!-- Vương miện nhỏ -->
+      <path d="M -7 -44 L -9 -50 L -4 -47 L 0 -52 L 4 -47 L 9 -50 L 7 -44 Z" fill="var(--gold)" filter="drop-shadow(0 0 5px rgba(255,217,138,0.9))"/>
+    </svg>
+  </div>
+  <div class="k">20 · 10 · gửi riêng</div>
+  <h2>các nàng <em>11A5</em></h2>
+  <p>chạm để mở quà</p>
+  <small>bật âm thanh để nghe trọn vẹn nhé</small>
+</div>
+<audio id="bgm" loop preload="auto" playsinline src="music.mp3"></audio>
+
+<script>
+(()=>{'use strict';
+const $=s=>document.querySelector(s), qp=new URLSearchParams(location.search), body=document.body, root=document.documentElement;
+const FROM=(qp.get('from')||'').trim().slice(0,40);
+const esc=s=>s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+/* ✎ Điền tên các bạn nữ để hiện đủ trong cảnh cuối: ['Lan','Mai','Hương'] — hoặc dùng link ?names=Lan,Mai,Hương */
+const NAMES=[];
+const QN=(qp.get('names')||'').split(',').map(x=>x.trim()).filter(Boolean).slice(0,40);
+
+/* hình dạng dùng cho hạt bay trên canvas */
+const STAR=new Path2D('M0-11C1.2-3.5 3.5-1.2 11 0C3.5 1.2 1.2 3.5 0 11C-1.2 3.5-3.5 1.2-11 0C-3.5-1.2-1.2-3.5 0-11z');
+const HEART=new Path2D('M0 6C-2 3-12-1-12-7C-12-11-7-13-4-10C-2-8-1-7 0-6C1-7 2-8 4-10C7-13 12-11 12-7C12-1 2 3 0 6Z');
+const PETAL=new Path2D('M 0 0 C -8 -7, -11 -16, -5 -23 C -1 -25, 4 -25, 8 -21 C 13 -14, 8 -6, 0 0 Z');
+
+/* bảng màu: [nền trên, nền dưới, cánh sáng, cánh đậm] */
+const PAL=[
+  ['#3a1262','#5a1750','#ff9ec7','#ff4f93'], // Hồng hoa hồng nồng nàn
+  ['#0b3a4a','#0a2f3a','#a6fbe0','#25c99d'], // Ngọc bích sức khỏe
+  ['#12275a','#0b3a5f','#c6e6ff','#5f9dff'], // Đại dương bình yên
+  ['#2d1a6e','#4a2a8a','#e0d0ff','#9170ff'], // Tím tự do mơ ước
+  ['#5a1240','#7a1d4e','#ffc9e1','#ff3b86'], // Đỏ cánh sen yêu thương
+  ['#4a1c5e','#8a3a5c','#ffe6a8','#ff8fb8']  // Hoàng hôn 11A5 rực rỡ
+];
+const SYM={star:'#s-star',heart:'#s-heart',moon:'#s-moon',sun:'#s-sun',leaf:'#s-leaf',bfly:'#s-bfly',book:'#s-book',crown:'#s-crown',gem:'#s-gem',ring:'#s-ring'};
+const STEPS=[
+ {t:'này các nàng <em>11A5</em> ơi!', o:0, pal:0, d:2600, or:'star', fx:{pet:.3}},
+ {t:'tớ là <em>Nụ</em> — nàng tiên nhỏ của vườn hoa', o:.06, pal:0, d:3200, or:'star heart'},
+ {v:'date', big:'20/10', t:'ngày của những người phụ nữ — và hôm nay là của các cậu', o:.16, pal:0, d:4000, or:'heart gem star', fx:{pet:1}},
+ {t:'cảm ơn các cậu vì đã luôn <em>rạng rỡ</em>, tử tế và mạnh mẽ — làm lớp mình đáng yêu hơn mỗi ngày', o:.22, pal:5, d:5200, or:'sun star', fx:{pet:.8}},
+ {t:'tớ xin gửi <em>toàn thể các bạn nữ 11A5</em> bốn lời chúc nhé', o:.28, pal:0, d:3200, or:'star ring'},
+ {big:'Sức khỏe', sub:'lời chúc thứ nhất', t:'để học thật tốt và đi hết những nơi các cậu muốn đến', o:.5, pal:1, d:4400, or:'leaf sun', fx:{pet:.2}},
+ {big:'Bình yên', sub:'lời chúc thứ hai', t:'dù ngoài kia có ồn ào thế nào, vẫn luôn có một góc dịu dàng cho các cậu', o:.68, pal:2, d:4600, or:'moon star'},
+ {big:'Tự do', sub:'lời chúc thứ ba', t:'đủ tự do để làm điều mình thích, đủ dũng cảm để theo đuổi ước mơ', o:.84, pal:3, d:4600, or:'bfly star', fx:{pet:.5}},
+ {big:'Yêu thương', sub:'lời chúc thứ tư', t:'luôn được yêu thương — đúng cách, đúng người, và cả bởi chính mình', o:1, pal:4, d:4800, or:'heart heart star', fx:{hrt:1,pet:.3}},
+ {v:'names', big:'11A5', sub:'những đóa hoa của lớp', t:'mỗi bạn nữ là một đóa hoa riêng — <em>không thiếu ai</em>, không ai giống ai', o:1, pal:5, d:6000, names:1, or:'crown gem star heart', fx:{pet:1,hrt:.5}},
+ {v:'final', o:1, pal:5, final:1, or:'crown heart sun bfly star', fx:{pet:1,hrt:.8}}
+];
+
+/* ---------- lời thoại: hiện từng chữ mượt mà ---------- */
+function words(el,html){ el.innerHTML=html; let k=0;
+  (function w(n){ [...n.childNodes].forEach(c=>{
+    if(c.nodeType===3){ const f=document.createDocumentFragment();
+      c.textContent.split(/(\s+)/).forEach(p=>{ if(!p) return; if(!p.trim()){ f.append(p); return; }
+        const s=document.createElement('span'); s.className='w'; s.textContent=p; s.style.animationDelay=(k++*60)+'ms'; f.append(s); });
+      c.replaceWith(f);
+    } else if(c.nodeType===1) w(c); }); })(el); }
+
+function fillNames(){
+  const box=$('#chips'), has=QN.length||NAMES.length, list=QN.length?QN:NAMES.length?NAMES:['rạng rỡ','mạnh mẽ','tử tế','dễ thương','giỏi giang','luôn tỏa sáng'];
+  box.className=list.length>14?'dense':'';
+  box.innerHTML=list.map((n,i)=>'<span class="chip" style="--d:'+(.9+i*.13)+'s">'+(has?'✿ ':'')+esc(n)+'</span>').join('');
+}
+
+/* ---------- biểu tượng SVG rải quanh màn hình, đổi theo từng cảnh ---------- */
+function orn(list){
+  const box=$('#orn'); box.innerHTML=''; if(!list) return;
+  const k=list.split(' ');
+  for(let i=0;i<8;i++){
+    const x=R()<.5?rn(3,17):rn(83,97), y=rn(6,94), s=rn(22,40)*(i%3===0?1.4:1);
+    box.insertAdjacentHTML('beforeend','<svg viewBox="-14 -14 28 28" style="--x:'+x.toFixed(1)+'%;--y:'+y.toFixed(1)+'%;--s:'+s.toFixed(0)+'px;--d:'+(.4+i*.16).toFixed(2)+'s;--op:'+(.5+R()*.4).toFixed(2)+';--r:'+(rn(-25,25)|0)+'deg"><use href="'+SYM[k[i%k.length]]+'"/></svg>');
+  }
+}
+
+/* ---------- điều khiển cảnh & nở hoa 60/120fps siêu mượt ---------- */
+const flower=$('#flower'), cap=$('#cap'), line=$('#line'), big=$('#big'), fin=$('#final'), bgm=$('#bgm'), dots=$('#dots');
+let idx=-1, T=null, FT=null, started=false, lock=0, fxS={pet:0,hrt:0};
+STEPS.forEach(()=>dots.insertAdjacentHTML('beforeend','<span class="seg"><i></i></span>'));
+const segs=[...dots.children];
+
+/* Trình làm mượt nở hoa (Interpolation Engine) */
+let currentO=0, oRaf=null;
+function animateO(target, dur=1900){
+  cancelAnimationFrame(oRaf);
+  const start=currentO, startTime=performance.now();
+  function step(now){
+    const p=Math.min(1,(now-startTime)/dur);
+    // Hàm easing mượt mà cubic-bezier
+    const ease=1-Math.pow(1-p,3);
+    currentO=start+(target-start)*ease;
+    flower.style.setProperty('--o',currentO.toFixed(4));
+    root.style.setProperty('--o',currentO.toFixed(4));
+    if(p<1) oRaf=requestAnimationFrame(step);
+    else{ currentO=target; flower.style.setProperty('--o',target); root.style.setProperty('--o',target); }
+  }
+  oRaf=requestAnimationFrame(step);
+}
+
+function go(n){
+  n=Math.max(0,Math.min(STEPS.length-1,n)); clearTimeout(T); clearInterval(FT); FT=null;
+  const s=STEPS[n], p=PAL[s.pal||0]; idx=n;
+  body.dataset.v=s.v||'hero';
+  body.style.setProperty('--bg1',p[0]); body.style.setProperty('--bg2',p[1]);
+  flower.style.setProperty('--c1',p[2]); flower.style.setProperty('--c2',p[3]);
+  root.style.setProperty('--c1',p[2]); root.style.setProperty('--c2',p[3]);
+
+  // Nở hoa siêu mượt với tốc độ đồng bộ
+  animateO(s.o, Math.min(2200, (s.d||3000)*0.75));
+
+  words(line,s.t||''); cap.classList.toggle('off',!s.t);
+  big.innerHTML=s.big?'<b>'+s.big+'</b>'+(s.sub?'<small>'+s.sub+'</small>':''):'';
+  if(s.names) fillNames(); else $('#chips').innerHTML='';
+  orn(s.or);
+  fin.classList.toggle('on',!!s.final);
+  fxS=Object.assign({pet:0,hrt:0},s.fx);
+  segs.forEach((e,i)=>{ e.className='seg'+(i<n?' done':i===n&&!s.final?' cur':''); e.style.setProperty('--dur',(s.d||3000)+'ms'); if(i===n&&!s.final){ void e.offsetWidth; } });
+  if(s.final){ segs[n].classList.add('done'); finale(); }
+  else if(!qp.has('hold')) T=setTimeout(()=>go(n+1),s.d||3000);
+}
+function tap(dir){ const t=Date.now(); if(!started||t-lock<260) return; lock=t; go(idx+dir); }
+
+addEventListener('click',e=>{
+  if(!started||e.target.closest('button,#final.on .card')) return;
+  sp(e.clientX,e.clientY,rn(300,340),8);
+  if(idx===STEPS.length-1){ burst(e.clientX,e.clientY,rn(300,350)); return; }
+  tap(e.clientX<innerWidth*.28?-1:1);
+});
+addEventListener('keydown',e=>{ if(e.key==='ArrowRight'||e.key===' '){ e.preventDefault(); tap(1); } else if(e.key==='ArrowLeft') tap(-1); });
+
+/* ---------- âm thanh ---------- */
+const BEAT=60000/76.5, OFF=450;
+$('#mute').addEventListener('click',()=>{ bgm.muted=!bgm.muted; $('#mute').classList.toggle('muted',bgm.muted); });
+$('#start').addEventListener('click',()=>{
+  if(started) return; started=true; $('#start').classList.add('gone');
+  bgm.volume=.9; const pr=bgm.play(); if(pr&&pr.catch) pr.catch(()=>{});
+  burst(innerWidth/2,innerHeight*.35,335); setTimeout(()=>go(0),600);
+});
+document.addEventListener('visibilitychange',()=>{ if(started&&!document.hidden&&bgm.paused&&!bgm.muted) bgm.play().catch(()=>{}); });
+
+/* ---------- thẻ kết ---------- */
+$('#f-to').textContent='gửi các bạn nữ lớp 11A5'+(FROM?' · từ '+FROM:'');
+if(location.protocol.startsWith('http')) $('#b-link').hidden=false;
+let hearts=0;
+$('#b-heart').addEventListener('click',e=>{ hearts++; $('#b-heart').textContent='♥ × '+hearts; const r=e.currentTarget.getBoundingClientRect(); burst(r.left+r.width/2,r.top-40,rn(320,350)); });
+$('#b-link').addEventListener('click',()=>{ const u=new URL(location.href); u.searchParams.delete('hold'); const b=$('#b-link');
+  (navigator.clipboard?navigator.clipboard.writeText(u.toString()):Promise.reject()).then(()=>{ b.textContent='đã chép ✓'; setTimeout(()=>b.textContent='chép link',1800); }).catch(()=>prompt('Sao chép liên kết:',u.toString())); });
+$('#b-replay').addEventListener('click',()=>{ hearts=0; $('#b-heart').textContent='gửi tim ♥'; go(0); });
+function finale(){
+  const w=innerWidth,h=innerHeight;
+  [[.3,.22,335],[.7,.2,265],[.5,.12,45]].forEach(([x,y,hu],i)=>setTimeout(()=>{ if(idx===STEPS.length-1) burst(w*x,h*y,hu); },300+i*350));
+  FT=setInterval(()=>{ if(!document.hidden) burst(rn(w*.12,w*.88),rn(h*.1,h*.3),pk([335,345,45,265,160])); },1500);
+}
+
+/* ---------- hiệu ứng nền (canvas) ---------- */
+const cv=$('#fx'), g=cv.getContext('2d'), R=Math.random, rn=(a,b)=>a+R()*(b-a), pk=a=>a[R()*a.length|0];
+const reduce=matchMedia('(prefers-reduced-motion:reduce)').matches, PC=['#ff9ec7','#ffd98a','#d9c4ff','#ffc2dd','#ff7ab8','#ffe6a8'];
+let W=0,H=0,stars=[],flies=[],P=[],pulse=0;
+function rs(){ const D=Math.min(devicePixelRatio||1,2); W=innerWidth; H=innerHeight; cv.width=W*D; cv.height=H*D; g.setTransform(D,0,0,D,0,0);
+  stars=Array.from({length:Math.min(180,W*H/6200|0)},()=>({x:R()*W,y:R()*H,r:rn(.4,1.6),t:R()*6.3,s:rn(.5,1.8)}));
+  flies=Array.from({length:reduce?0:24},()=>({x:R()*W,y:R()*H,a:R()*6.3,s:rn(8,24),r:rn(1.4,3.2),t:R()*6.3})); }
+addEventListener('resize',rs); rs();
+
+/* sao lấp lánh khi chạm */
+function sp(x,y,hue,n){ if(reduce) return;
+  for(let i=0;i<n;i++){ const a=R()*6.283, v=rn(40,160);
+    P.push({k:4,x,y,vx:Math.cos(a)*v,vy:Math.sin(a)*v,l:1,h:hue+rn(-15,15),r:rn(5,10),rot:R()*6}); } }
+
+function burst(x,y,hue){ /* pháo hoa hình trái tim + sao hoàng kim */
+  if(reduce) return;
+  const k=Math.min(W,H)/390*14;
+  for(let i=0;i<96;i++){ const t=i/96*6.283, hx=16*Math.sin(t)**3, hy=-(13*Math.cos(t)-5*Math.cos(2*t)-2*Math.cos(3*t)-Math.cos(4*t));
+    P.push({k:2,x,y,vx:hx*k,vy:hy*k,l:1,h:hue+rn(-12,12),s:2.2}); }
+  for(let i=0;i<48;i++){ const a=R()*6.283, v=rn(20,150)*(k/14); P.push({k:2,x,y,vx:Math.cos(a)*v,vy:Math.sin(a)*v,l:1,h:45+rn(-10,15),s:1.6}); }
+  for(let i=0;i<16;i++){ const a=R()*6.283, v=rn(60,230)*(k/14); P.push({k:4,x,y,vx:Math.cos(a)*v,vy:Math.sin(a)*v,l:1,h:hue+rn(-20,20),r:rn(5,12),rot:R()*6}); }
+  P.push({k:3,x,y,r:6,l:1,h:hue});
+}
+
+function frame(t){
+  const dt=Math.min(.05,(t-frame.l)/1000||.016); frame.l=t;
+  const ph=bgm.paused?((t%BEAT)/BEAT):((((bgm.currentTime*1000-OFF)%BEAT)+BEAT)%BEAT/BEAT);
+  pulse=Math.max(pulse*Math.pow(.02,dt),Math.pow(Math.max(0,1-ph*2.4),2)*.7); root.style.setProperty('--p',pulse.toFixed(2));
+  g.clearRect(0,0,W,H);
+  for(const s of stars){ s.t+=dt*s.s; g.globalAlpha=Math.min(1,.3+.5*Math.abs(Math.sin(s.t))+pulse*.2); g.fillStyle='#fff'; g.beginPath(); g.arc(s.x,s.y,s.r*(1+pulse*.3),0,6.283); g.fill(); }
+  g.globalCompositeOperation='lighter';   /* đom đóm dạ quang */
+  for(const f of flies){ f.t+=dt; f.a+=Math.sin(f.t*.7)*dt*1.4; f.x+=Math.cos(f.a)*f.s*dt; f.y+=Math.sin(f.a)*f.s*dt-3*dt; if(f.x<-20)f.x=W+20; if(f.x>W+20)f.x=-20; if(f.y<-20)f.y=H+20; if(f.y>H+20)f.y=-20;
+    const a=.35+.65*Math.abs(Math.sin(f.t*1.6)), gr=g.createRadialGradient(f.x,f.y,0,f.x,f.y,f.r*7); gr.addColorStop(0,'rgba(255,226,140,'+a+')'); gr.addColorStop(1,'rgba(255,200,100,0)'); g.fillStyle=gr; g.beginPath(); g.arc(f.x,f.y,f.r*7,0,6.283); g.fill(); }
+  g.globalCompositeOperation='source-over'; g.globalAlpha=1;
+  if(!reduce){ spawnAcc.p+=dt*fxS.pet*7; spawnAcc.h+=dt*fxS.hrt*4;
+    while(spawnAcc.p>=1){ spawnAcc.p--; P.push({k:0,x:rn(0,W),y:-20,vx:rn(-12,18),vy:rn(35,80),r:R()*6,vr:rn(-2,2),s:rn(5,11),ph:R()*6,c:pk(PC)}); }
+    while(spawnAcc.h>=1){ spawnAcc.h--; P.push({k:1,x:rn(0,W),y:H+20,vx:rn(-15,15),vy:-rn(50,110),s:rn(9,20),ph:R()*6,c:pk(['#ff7ab8','#ff4f93','#ffc2dd'])}); } }
+  if(P.length>900) P.splice(0,P.length-900);
+  for(let i=P.length-1;i>=0;i--){ const p=P[i];
+    if(p.k===2){ p.vx*=Math.pow(.04,dt*.9); p.vy=p.vy*Math.pow(.04,dt*.9)+70*dt; p.x+=p.vx*dt; p.y+=p.vy*dt; p.l-=dt*.62; if(p.l<=0){ P.splice(i,1); continue; }
+      g.globalCompositeOperation='lighter'; g.globalAlpha=Math.max(0,p.l); g.fillStyle='hsl('+p.h+',100%,'+(60+p.l*14)+'%)'; g.beginPath(); g.arc(p.x,p.y,p.s*(.6+p.l*.6),0,6.283); g.fill(); g.globalCompositeOperation='source-over'; g.globalAlpha=1; continue; }
+    if(p.k===3){ p.r+=(Math.min(W,H)*.34-p.r)*dt*3.5+dt*20; p.l-=dt*1.5; if(p.l<=0){ P.splice(i,1); continue; }
+      g.globalCompositeOperation='lighter'; g.strokeStyle='hsla('+p.h+',100%,70%,'+p.l*.7+')'; g.lineWidth=1+p.l*4; g.beginPath(); g.arc(p.x,p.y,p.r,0,6.283); g.stroke(); g.globalCompositeOperation='source-over'; continue; }
+    if(p.k===4){ p.vx*=Math.pow(.1,dt); p.vy*=Math.pow(.1,dt); p.x+=p.vx*dt; p.y+=p.vy*dt; p.l-=dt*.9; p.rot+=dt*3; if(p.l<=0){ P.splice(i,1); continue; }
+      g.save(); g.globalCompositeOperation='lighter'; g.globalAlpha=p.l; g.fillStyle='hsl('+p.h+',100%,82%)'; g.translate(p.x,p.y); g.rotate(p.rot); g.scale(p.r*p.l/10,p.r*p.l/10); g.fill(STAR); g.restore(); continue; }
+    p.ph+=dt*2; p.x+=(p.vx+Math.sin(p.ph)*22)*dt; p.y+=p.vy*dt;
+    if(p.y>H+40||p.y<-60){ P.splice(i,1); continue; }
+    g.save(); g.translate(p.x,p.y); g.fillStyle=p.c;
+    if(p.k===0){ p.r+=p.vr*dt; g.rotate(p.r); g.scale(Math.abs(Math.cos(p.ph))*.7+.3,1); g.globalAlpha=.9; g.scale(p.s/10,p.s/10); g.fill(PETAL); }
+    else { g.globalAlpha=.85; const z=p.s*(1+pulse*.2)/14; g.scale(z,z); g.fill(HEART); }
+    g.restore(); }
+  requestAnimationFrame(frame);
+}
+const spawnAcc={p:0,h:0}; frame.l=performance.now(); requestAnimationFrame(frame);
+if(qp.has('debug')) window.__go=go;
+const initStep=qp.get('step')!==null?parseInt(qp.get('step'),10):null;
+if(initStep!==null&&!isNaN(initStep)){ started=true; $('#start').classList.add('gone'); setTimeout(()=>go(initStep),200); }
+})();
+</script>
+</body>
+</html>
